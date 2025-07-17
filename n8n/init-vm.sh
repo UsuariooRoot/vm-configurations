@@ -47,4 +47,6 @@ sudo systemctl enable nginx
 echo "Create $HOME/app directory"
 mkdir -p /home/azureuser/app
 
+# Restart VM
+sudo reboot
 
