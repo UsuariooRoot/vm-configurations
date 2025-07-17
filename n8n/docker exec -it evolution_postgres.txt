@@ -1,0 +1,5 @@
+docker exec -it evolution_postgres psql -U evouser -d evolutiondb
+
+CREATE USER n8nuser WITH PASSWORD 'n8npass';
+CREATE DATABASE n8ndb OWNER n8nuser;
+GRANT ALL PRIVILEGES ON DATABASE n8ndb TO n8nuser;

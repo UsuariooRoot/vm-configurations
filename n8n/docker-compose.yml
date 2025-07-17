@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:16.9
+    container_name: automation_postgres
+    restart: unless-stopped
+    env_file:
+        .env.postgres
+    ports:
+      - "5432"
+    volumes:
+      - automation_postgres_data:/var/lib/postgresql/data
+    networks:
+      - automation
+
+  redis:
+    image: redis:alpine
+    container_name: automation_redis
+    restart: unless-stopped
+    ports:
+      - "6379"
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    env_file:
+      - .env.redis
+    networks:
+      - automation
+
+  evolution-api:
+    container_name: automation_evolution_api
+    image: atendai/evolution-api:v2.2.3
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.evo
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - automation_evolution_data:/evolution/instances
+    networks:
+      - automation
+
+  n8n:
+    container_name: automation_n8n
+    image: n8nio/n8n:1.102.3
+    restart: unless-stopped
+    environment:
+      GENERIC_TIMEZONE: America/Lima
+      N8N_PATH: 
+      N8N_HOST: 
+    ports:
+      - "5678:5678"
+    volumes:
+      - automation_n8n_data:/home/node/.n8n
+    networks:
+      - automation
+
+volumes:
+  automation_postgres_data:
+    external: true
+  automation_evolution_data:
+    external: true
+  automation_n8n_data:
+    external: true
+
+networks:
+    automation:
+      external: true
