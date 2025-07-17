@@ -38,9 +38,6 @@ sudo groupadd docker
 # Add user to the `docker` group
 sudo usermod -aG docker $USER
 
-# Restart VM
-sudo reboot
-
 # Instalar Nginx y Certbot
 sudo apt-get install -y nginx certbot python3-certbot-nginx
 
@@ -50,4 +47,6 @@ sudo systemctl enable nginx
 # Crear carpeta de proyecto
 mkdir -p /home/azureuser/app
 
+# Restart VM
+sudo reboot
 
